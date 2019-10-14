@@ -41,6 +41,7 @@ Oskari.registerLocalization(
             },
             'dataProvider': 'Tiedontuottaja',
             'addDataProvider': 'Lisää tiedontuottaja',
+            'addTheme': 'Lisää aihe',
             'mapLayerGroups': 'Tason ryhmät',
             'selectMapLayerGroupsButton': 'Valitse ryhmät',
             'cancel': 'Peruuta',

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
 import { LayerFilters } from './LayerFilters';
-import { Button } from 'oskari-ui';
+import { Button, Dropdown, Menu } from 'oskari-ui';
 import styled from 'styled-components';
 
 /**
@@ -50,7 +50,8 @@ Oskari.clazz.define(
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
         this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
         this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
-        Oskari.on('app.start', () => this._addLayerWizardBtn());
+        // Oskari.on('app.start', () => this._addLayerWizardBtn());
+        Oskari.on('app.start', () => this._addNewDropdown());
         this._createUI(id);
     }, {
 
@@ -100,22 +101,22 @@ Oskari.clazz.define(
          * Creates info icon for given oskarifield
          */
         _createInfoIcon: function (oskarifield) {
-            var me = this,
-                infoIcon = jQuery('<div class="icon-info"></div>'),
-                indicatorCont = oskarifield.find('.field-description');
+            var me = this;
+            var infoIcon = jQuery('<div class="icon-info"></div>');
+            var indicatorCont = oskarifield.find('.field-description');
             // clear previous indicator
             indicatorCont.find('.icon-info').remove();
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
             infoIcon.on('click', function (e) {
-                var desc = jQuery(me.templates.description),
-                    dialog = Oskari.clazz.create(
-                        'Oskari.userinterface.component.Popup'
-                    ),
-                    okBtn = Oskari.clazz.create(
-                        'Oskari.userinterface.component.buttons.OkButton'
-                    );
+                var desc = jQuery(me.templates.description);
+                var dialog = Oskari.clazz.create(
+                    'Oskari.userinterface.component.Popup'
+                );
+                var okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.OkButton'
+                );
 
                 desc.find('p').text(me._locale.filter.description);
                 okBtn.addClass('primary');
@@ -133,8 +134,8 @@ Oskari.clazz.define(
          * @param  {String} oskarifieldId oskari field id
          */
         _createUI: function (oskarifieldId) {
-            var me = this,
-                oskarifield;
+            var me = this;
+            var oskarifield;
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -187,8 +188,10 @@ Oskari.clazz.define(
                 const PositionedButton = styled(Button)`
                     position: absolute;
                     right: 40px;
-                    top: 80px;
+                    top: 73px;
                     line-height: 0;
+                    border: 1px solid #a4a4a4;
+                    height: 52px;
                 `;
                 const OpenLayerWizardButton = () => (
                     <PositionedButton
@@ -200,6 +203,54 @@ Oskari.clazz.define(
                 const layerWizardBtnMountPoint = jQuery(this.templates.layerWizardBtnMountPoint);
                 this.tabPanel.getContainer().append(layerWizardBtnMountPoint);
                 ReactDOM.render(<OpenLayerWizardButton/>, layerWizardBtnMountPoint[0]);
+            }
+        },
+
+        _addNewDropdown: function () {
+            if (Oskari.getSandbox().hasHandler('ShowLayerEditorRequest')) {
+                const StyledButton = styled(Button)`
+                    border: 1px solid #a4a4a4;
+                    height: 52px;
+                `;
+                const PositionedDropdown = styled(Dropdown)`
+                    position: absolute;
+                    right: 40px;
+                    top: 73px;
+                    line-height: 0;
+                `;
+                const OpenButton = () => (
+                    <StyledButton
+                        size="large"
+                        icon="plus"
+                        title={this._locale.tooltip.addNew} />
+                );
+                const MenuForDropdown = () => {
+                    const items = [
+                        {
+                            title: this._locale.tooltip.addLayer,
+                            action: () => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', [])
+                        },
+                        {
+                            title: 'Lisää jotai muuta',
+                            action: () => console.log('lol')
+                        },
+                        {
+                            title: 'Lisää vielä jotai',
+                            action: () => console.log('xd')
+                        }
+                    ];
+                    return (
+                        <Menu items={items} />
+                    );
+                };
+                const OpenAddNewDropdown = () => (
+                    <PositionedDropdown menu={MenuForDropdown} click={false}>
+                        <OpenButton />
+                    </PositionedDropdown>
+                );
+                const layerWizardBtnMountPoint = jQuery(this.templates.layerWizardBtnMountPoint);
+                this.tabPanel.getContainer().append(layerWizardBtnMountPoint);
+                ReactDOM.render(<OpenAddNewDropdown/>, layerWizardBtnMountPoint[0]);
             }
         },
 
@@ -224,9 +275,9 @@ Oskari.clazz.define(
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function () {
-            var me = this,
-                field,
-                timer = 0;
+            var me = this;
+            var field;
+            var timer = 0;
             if (me.filterField) {
                 return me.filterField;
             }
@@ -470,8 +521,8 @@ Oskari.clazz.define(
          * Concatenates (in place) those values from arr2 to arr1 that are not present in arr1
          */
         _concatNew: function (arr1, arr2) {
-            var me = this,
-                i;
+            var me = this;
+            var i;
 
             for (i = arr2.length - 1; i >= 0; i -= 1) {
                 if (!me._arrayContains(arr1, arr2[i])) {
