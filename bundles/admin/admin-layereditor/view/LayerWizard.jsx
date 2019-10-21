@@ -5,7 +5,6 @@ import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { withLocale, withMutator } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
-import { DataProviderThemeButtons } from './AdminLayerForm/DataProviderThemeButtons';
 
 const WIZARD_STEP = {
     INITIAL: 0,
@@ -74,7 +73,6 @@ const LayerWizard = ({
                     <LayerTypeSelection
                         types={layerTypes || []}
                         onSelect={(type) => mutator.setType(type)} />
-                    <DataProviderThemeButtons getMessage={getMessage}/>
                 </div>
             }
             { currentStep === WIZARD_STEP.SERVICE &&
