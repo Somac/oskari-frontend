@@ -4,7 +4,12 @@ import { Dropdown as AntDropdown } from 'antd';
 
 export const Dropdown = ({ children, menu, click = true }) => (
     <AntDropdown overlay={menu} trigger={click ? ['click'] : ['hover']}>
-        {children}
+        {click &&
+            <a className="ant-dropdown-link" href="#">
+                {children}
+            </a>
+        }
+        {!click && children}
     </AntDropdown>
 );
 
