@@ -23,28 +23,29 @@ Requests a map to be moved to certain zoom level and location for a duration of 
   <td> Array of Objects</td>
   <td> List of locations as an array of objects.
     Contains longitude, latitude and various optional override options 
-    ```javascript
-    [
-        {
-            lon: x,
-            lat: y
-        },
-        {
-            lon: x,
-            lat: y,
-            animation: 'fly'|'pan'|'zoomPan',
-            zoom: { scale: 4000 } | {left, top, bottom, right} | 8,
-            duration: 3000,
-            delay: 750,
-            camera: {
-                heading: -2,
-                roll: 0.5,
-                pitch: -0.1
-            }
+<pre><code>
+[
+    {
+        lon: x,
+        lat: y
+    },
+    {
+        lon: x,
+        lat: y,
+        animation: 'fly'|'pan'|'zoomPan',
+        zoom: { scale } | {left, top, bottom, right} | Number,
+        duration,
+        delay,
+        camera: {
+            heading,
+            roll,
+            pitch
         }
-    ]
-    ```</td>
-  <td></td>
+    }
+]
+</code></pre>
+    </td>
+  <td>Options default values come from { options } object</td>
 </tr>
 <tr>
   <td> options </td>
@@ -54,21 +55,19 @@ Requests a map to be moved to certain zoom level and location for a duration of 
   ```javascript
   { 
     srsName: 'EPSG:3857',
-    cancelled: () => true,
-    completed: () => true,
     animation: 'fly'|'pan'|'zoomPan',
-    zoom: { scale: 4000 } | {left, top, bottom, right} | 8,
-    duration: 3000,
-    delay: 750,
+    zoom: { scale } | {left, top, bottom, right} | Number,
+    duration,
+    delay,
     camera: {
-        heading: -2,
-        roll: 0.5,
-        pitch: -0.1
+        heading,
+        roll,
+        pitch
     }
   }
   ```
   </td>
-  <td> </td>
+  <td>{animation: '', zoom: mapZoom, duration: 3000, delay: 750, camera: {heading: 0, roll: 0, pitch: }</td>
 </tr>
 </table>
 
@@ -84,13 +83,13 @@ var location1 = {
         delay: 2000
     }
 var location2 = {
-        lon: 8438530,
-        lat: 2789651,
+        lon: 2789651,
+        lat: 8438530,
         duration: 6000
     }
 var location3 = {
-        lon: 8500506,
-        lat: 2479009,
+        lon: 2479009,
+        lat: 8500506,
     }
 var options = {
         zoom: 10, 
